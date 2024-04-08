@@ -57,14 +57,9 @@ public class CommonValidators {
 
       @Override
       public Boolean isValidCheck(T model) {
-        if (model instanceof BaseResource) {
-          BaseResource resource = (BaseResource) model;
-          if (resource != null) {
-            return !resource.getName().equals(resource.getTitle()) && StringUtils.isNotEmpty(
-                    resource.getTitle());
-          }
-        }
-        return false;
+        BaseResource resource = model;
+        return !resource.getName().equals(resource.getTitle()) && StringUtils.isNotEmpty(
+                resource.getTitle());
       }
 
       @Override
@@ -98,13 +93,8 @@ public class CommonValidators {
 
       @Override
       public Boolean isValidCheck(T model) {
-        if (model instanceof BaseResource) {
-          BaseResource resource = (BaseResource) model;
-          if (model != null) {
-            return StringUtils.isNotEmpty(resource.getDescription());
-          }
-        }
-        return false;
+        BaseResource resource = model;
+        return StringUtils.isNotEmpty(resource.getDescription());
       }
 
       @Override
@@ -139,13 +129,8 @@ public class CommonValidators {
 
       @Override
       public Boolean isValidCheck(T model) {
-        if (model instanceof BaseResource) {
-          BaseResource resource = (BaseResource) model;
-          if (resource != null) {
-            return resource.getName().endsWith(extension);
-          }
-        }
-        return false;
+        BaseResource resource = model;
+        return resource.getName().endsWith(extension);
       }
 
       @Override
@@ -175,6 +160,7 @@ public class CommonValidators {
    *
    * @param childName name of the child Resource to check for.
    * @param <T> Generic model type.
+   * @param type Level of validation message to return.
    *
    * @return Validator that checks if a specified child Resource exists.
    */
@@ -217,12 +203,13 @@ public class CommonValidators {
    * @param childType type of Model to attempt to adapt the child to. Must extend BaseResource.
    * @param <T> Generic model type.
    * @param <S> Generic model type.
+   * @param type Level of validation message to return.
    *
    * @return Validator that checks if a specified child does not fail any ERROR type validators.
    */
-  public static <T extends BaseResource, S extends BaseResource>
-  ModelValidator isChildResourceValidResourceType(
-          final String childName, final Class<S> childType, ModelValidationMessageType type) {
+  public static <T extends BaseResource, S extends BaseResource> ModelValidator
+      isChildResourceValidResourceType(final String childName, final Class<S> childType,
+          ModelValidationMessageType type) {
 
     return new ModelValidator<T>() {
 
@@ -262,11 +249,12 @@ public class CommonValidators {
    * @param childType type of Model to attempt to adapt the child to. Must extend BaseResource.
    * @param <T> Generic model type.
    * @param <S> Generic model type.
+   * @param messageType Message type to return failed validation as.
    *
    * @return Model Validator Bundle that checks if a specified child resource exists, and is valid.
    */
-  public static <T extends BaseResource, S extends BaseResource> ModelValidatorBundle<T> hasValidChild(
-          final String childName, final Class<S> childType,
+  public static <T extends BaseResource, S extends BaseResource> ModelValidatorBundle<T>
+      hasValidChild(final String childName, final Class<S> childType,
           final ModelValidationMessageType messageType) {
     return new ModelValidatorBundle<T>() {
       @Override
@@ -297,6 +285,7 @@ public class CommonValidators {
    *
    * @param model model to build Validator List from.
    * @param <T> Generic type
+   * @param modelValidationResult ModelValidationResult to build validators from.
    *
    * @return List of failed Error validators from a model.
    */
@@ -337,6 +326,7 @@ public class CommonValidators {
    *
    * @param model model to build Validator List from.
    * @param <T> Generic type
+   * @param modelValidationResult ModelValidationResult to build validators from.
    *
    * @return List of failed Error Warning from a model.
    */
@@ -344,8 +334,7 @@ public class CommonValidators {
           final T model, ModelValidationResult modelValidationResult) {
     final List<ModelValidator> warningValidators = new ArrayList<>();
 
-    for (final String warningMessage : modelValidationResult.getMessages().get(
-            WARNING)) {
+    for (final String warningMessage : modelValidationResult.getMessages().get(WARNING)) {
       final ModelValidator validator = new ModelValidator<T>() {
 
         @Override
@@ -421,6 +410,8 @@ public class CommonValidators {
    * @param modelList models to check for errors.
    * @param message Validation message
    * @param <T> Extends base Resource.
+   * @param detailedMessage Detailed message to return if validation fails.
+   * @param modelValidationService ModelValidationService to use for validation.
    *
    * @return Validates whether a specified list of models has any error messages.
    */
@@ -437,6 +428,8 @@ public class CommonValidators {
    * @param modelList models to check for warnings.
    * @param message Validation message
    * @param <T> Extends base Resource.
+   * @param detailedMessage Detailed message to return if validation fails.
+   * @param modelValidationService ModelValidationService to use for validation.
    *
    * @return Validates whether a specified list of models has any warning messages.
    */
@@ -449,8 +442,7 @@ public class CommonValidators {
 
   private static <T extends BaseResource> ModelValidator modelListHasNoFailedValidatorsOfType(
           List<T> modelList, String message, String detailedMessage,
-          ModelValidationMessageType type,
-          ModelValidationService validationService) {
+          ModelValidationMessageType type, ModelValidationService validationService) {
     return new ModelValidator<T>() {
 
       @Override

@@ -19,6 +19,7 @@
 
 package io.kestros.commons.validation.api.models;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.validation.api.ModelValidationMessageType;
 import java.util.ArrayList;
@@ -34,8 +35,9 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
   /**
    * Constructs ModelValidator that holds a set of ModelValidators.
    */
+  @SuppressFBWarnings("MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR")
   public ModelValidatorBundle() {
-    registerValidators();
+    this.registerValidators();
   }
 
   @Override
@@ -53,6 +55,13 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
     return isAllMustBeTrue();
   }
 
+  /**
+   * Returns a detailed message for the current bundle.
+   *
+   * @param model Model providing context for the detailed message.
+   *
+   * @return Detailed message for the current bundle.
+   */
   public String getDetailedMessage(T model) {
     if (this.isAllMustBeTrue()) {
       return "All of the following are true:";
@@ -104,9 +113,14 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
    * @return List of all ModelsValidators in the bundle.
    */
   public List<ModelValidator<T>> getValidators() {
-    return validators;
+    return new ArrayList<>(validators);
   }
 
+  /**
+   * Validation level of the current bundle.
+   *
+   * @return Validation level of the current bundle.
+   */
   public ModelValidationMessageType getType() {
     ModelValidationMessageType type = ModelValidationMessageType.INFO;
     for (ModelValidator validator : getValidators()) {

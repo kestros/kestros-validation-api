@@ -25,7 +25,7 @@ import io.kestros.commons.structuredslingmodels.BaseSlingModel;
  * Model validator which can also provide a resourceType for contextual troubleshooting
  * documentation.
  */
-public abstract class DocumentedModelValidator<T extends  BaseSlingModel> extends ModelValidator<T> {
+public abstract class DocumentedModelValidator<T extends BaseSlingModel> extends ModelValidator<T> {
 
 
   /**
