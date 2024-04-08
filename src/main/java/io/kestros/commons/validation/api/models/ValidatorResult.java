@@ -25,6 +25,8 @@ public interface ValidatorResult {
   @Nonnull
   String getValidatorClassPath();
 
+  ModelValidationMessageType getType();
+
   @Nonnull
   Map<ModelValidationMessageType, List<String>> getMessages();
 

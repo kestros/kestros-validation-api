@@ -27,7 +27,7 @@ import static io.kestros.commons.validation.api.ModelValidationMessageType.WARNI
 import io.kestros.commons.structuredslingmodels.BaseResource;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
-import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
+import io.kestros.commons.structuredslingmodels.exceptions.InvalidResourceTypeException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
 import io.kestros.commons.validation.api.ModelValidationMessageType;
 import io.kestros.commons.validation.api.models.ModelValidationResult;
@@ -178,7 +178,8 @@ public class CommonValidators {
    *
    * @return Validator that checks if a specified child Resource exists.
    */
-  public static <T extends BaseResource> ModelValidator hasChildResource(final String childName) {
+  public static <T extends BaseResource> ModelValidator hasChildResource(final String childName,
+          ModelValidationMessageType type) {
     return new ModelValidator<T>() {
 
       @Override
@@ -204,7 +205,7 @@ public class CommonValidators {
 
       @Override
       public ModelValidationMessageType getType() {
-        return ERROR;
+        return type;
       }
     };
   }
@@ -221,7 +222,7 @@ public class CommonValidators {
    */
   public static <T extends BaseResource, S extends BaseResource>
   ModelValidator isChildResourceValidResourceType(
-          final String childName, final Class<S> childType) {
+          final String childName, final Class<S> childType, ModelValidationMessageType type) {
 
     return new ModelValidator<T>() {
 
@@ -229,8 +230,10 @@ public class CommonValidators {
       public Boolean isValidCheck(T model) {
         try {
           SlingModelUtils.getChildAsType(childName, model.getResource(), childType);
-        } catch (final ModelAdaptionException exception) {
+        } catch (InvalidResourceTypeException e) {
           return false;
+        } catch (ChildResourceNotFoundException e) {
+          return true;
         }
         return true;
       }
@@ -247,7 +250,7 @@ public class CommonValidators {
 
       @Override
       public ModelValidationMessageType getType() {
-        return ERROR;
+        return type;
       }
     };
   }
@@ -263,7 +266,8 @@ public class CommonValidators {
    * @return Model Validator Bundle that checks if a specified child resource exists, and is valid.
    */
   public static <T extends BaseResource, S extends BaseResource> ModelValidatorBundle<T> hasValidChild(
-          final String childName, final Class<S> childType) {
+          final String childName, final Class<S> childType,
+          final ModelValidationMessageType messageType) {
     return new ModelValidatorBundle<T>() {
       @Override
       public String getMessage() {
@@ -272,13 +276,13 @@ public class CommonValidators {
 
       @Override
       public void registerValidators() {
-        addValidator(hasChildResource(childName));
-        addValidator(isChildResourceValidResourceType(childName, childType));
+        addValidator(hasChildResource(childName, messageType));
+        addValidator(isChildResourceValidResourceType(childName, childType, messageType));
       }
 
       @Override
       public ModelValidationMessageType getType() {
-        return ERROR;
+        return messageType;
       }
 
       @Override
