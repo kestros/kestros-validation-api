@@ -23,6 +23,7 @@ package io.kestros.commons.validation.api.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.validation.api.ModelValidationMessageType;
+import javax.annotation.Nonnull;
 
 /**
  * Base interface for Model Validation rules.
@@ -32,17 +33,21 @@ public abstract class ModelValidator<T extends BaseSlingModel> {
 
   /**
    * Boolean logic To determine whether the current validator passes validation.
+   *
    * @param model Model to validate.
+   *
    * @return Whether the current Validator is valid or not.
    */
+  @Nonnull
   @JsonIgnore
-  public abstract Boolean isValidCheck(T model);
+  public abstract Boolean isValidCheck(@Nonnull T model);
 
   /**
    * Message to be shown when the current validator is not valid.
    *
    * @return Message to be shown when the current validator is not valid.
    */
+  @Nonnull
   public abstract String getMessage();
 
   /**
@@ -52,12 +57,14 @@ public abstract class ModelValidator<T extends BaseSlingModel> {
    *
    * @return Detailed message to be shown when the current validator is not valid.
    */
-  public abstract String getDetailedMessage(T model);
+  @Nonnull
+  public abstract String getDetailedMessage(@Nonnull T model);
 
   /**
    * The error level of the current validator.  Can be ERROR, WARNING or INFO.
    *
    * @return The error level of the current validator.
    */
+  @Nonnull
   public abstract ModelValidationMessageType getType();
 }
