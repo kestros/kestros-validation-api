@@ -24,6 +24,7 @@ import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.validation.api.ModelValidationMessageType;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * ModelValidator that holds a set of ModelValidators.
@@ -35,21 +36,23 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
   /**
    * Constructs ModelValidator that holds a set of ModelValidators.
    */
-  @SuppressFBWarnings("MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR")
+  @SuppressFBWarnings({"MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR",
+          "PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS"})
   public ModelValidatorBundle() {
     this.registerValidators();
   }
 
+  @Nonnull
   @Override
-  public Boolean isValidCheck(T model) {
+  public Boolean isValidCheck(@Nonnull T model) {
     if (validators.isEmpty()) {
       registerValidators();
     }
     for (final ModelValidator validator : getValidators()) {
       if (isAllMustBeTrue() && !validator.isValidCheck(model)) {
-        return false;
+        return Boolean.FALSE;
       } else if (!isAllMustBeTrue() && validator.isValidCheck(model)) {
-        return true;
+        return Boolean.TRUE;
       }
     }
     return isAllMustBeTrue();
@@ -62,7 +65,8 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
    *
    * @return Detailed message for the current bundle.
    */
-  public String getDetailedMessage(T model) {
+  @Nonnull
+  public String getDetailedMessage(@Nonnull T model) {
     if (this.isAllMustBeTrue()) {
       return "All of the following are true:";
     } else {
@@ -89,7 +93,8 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
    *
    * @param validator ModelValidator to add to the bundle.
    */
-  public void addValidator(final ModelValidator<T> validator) {
+  @SuppressFBWarnings("OPM_OVERLY_PERMISSIVE_METHOD")
+  public void addValidator(@Nonnull final ModelValidator<T> validator) {
     validators.add(validator);
   }
 
@@ -98,7 +103,7 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
    *
    * @param validatorList ModelValidator List to add to the bundle.
    */
-  public void addAllValidators(final List<ModelValidator<T>> validatorList) {
+  public void addAllValidators(@Nonnull final List<ModelValidator<T>> validatorList) {
     if (validatorList == null) {
       return;
     }
@@ -112,6 +117,7 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
    *
    * @return List of all ModelsValidators in the bundle.
    */
+  @Nonnull
   public List<ModelValidator<T>> getValidators() {
     return new ArrayList<>(validators);
   }
@@ -121,12 +127,14 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
    *
    * @return Validation level of the current bundle.
    */
+  @SuppressFBWarnings("SLS_SUSPICIOUS_LOOP_SEARCH")
+  @Nonnull
   public ModelValidationMessageType getType() {
     ModelValidationMessageType type = ModelValidationMessageType.INFO;
     for (ModelValidator validator : getValidators()) {
-      if (validator.getType().equals(ModelValidationMessageType.ERROR)) {
+      if (validator.getType().name().equals(ModelValidationMessageType.ERROR.name())) {
         return ModelValidationMessageType.ERROR;
-      } else if (validator.getType().equals(ModelValidationMessageType.WARNING)) {
+      } else if (validator.getType().name().equals(ModelValidationMessageType.WARNING.name())) {
         type = ModelValidationMessageType.WARNING;
       }
     }

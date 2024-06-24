@@ -24,6 +24,7 @@ import io.kestros.commons.osgiserviceutils.services.ManagedService;
 import io.kestros.commons.validation.api.models.ModelValidator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  * Handles registration and unregistration of ModelValidators.
@@ -35,6 +36,7 @@ public interface ModelValidatorRegistrationHandlerService extends ManagedService
    *
    * @return a map of registered ModelValidators.
    */
+  @Nonnull
   Map<Class, List<ModelValidator>> getRegisteredModelValidatorMap();
 
   /**
@@ -47,14 +49,16 @@ public interface ModelValidatorRegistrationHandlerService extends ManagedService
    *
    * @param registrationService OSGI service to register validators from.
    */
-  void registerAllValidatorsFromService(ModelValidatorRegistrationService registrationService);
+  void registerAllValidatorsFromService(
+          @Nonnull ModelValidatorRegistrationService registrationService);
 
   /**
    * Unregisters all validators from a specific OSGI service.
    *
    * @param registrationService OSGI service to unregister validators from.
    */
-  void unregisterAllValidatorsFromService(ModelValidatorRegistrationService registrationService);
+  void unregisterAllValidatorsFromService(
+          @Nonnull ModelValidatorRegistrationService registrationService);
 
   /**
    * Registers a list of ModelValidators to a specific Model type.
@@ -62,7 +66,8 @@ public interface ModelValidatorRegistrationHandlerService extends ManagedService
    * @param modelValidators List of ModelValidators to register.
    * @param type Model type to register the validators to.
    */
-  void registerValidators(List<ModelValidator> modelValidators, Class type);
+  void registerValidators(@Nonnull final List<ModelValidator> modelValidators,
+          @Nonnull final Class type);
 
   /**
    * Removes a list of ModelValidators from a specific Model type.
@@ -70,6 +75,7 @@ public interface ModelValidatorRegistrationHandlerService extends ManagedService
    * @param modelValidators List of ModelValidators to remove.
    * @param type Model type to remove the validators from.
    */
-  void removeValidators(List<ModelValidator> modelValidators, Class type);
+  void removeValidators(@Nonnull final List<ModelValidator> modelValidators,
+          @Nonnull final Class type);
 
 }

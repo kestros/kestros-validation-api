@@ -20,6 +20,7 @@
 package io.kestros.commons.validation.api.models;
 
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import javax.annotation.Nonnull;
 
 /**
  * Model validator which can also provide a resourceType for contextual troubleshooting
@@ -33,6 +34,7 @@ public abstract class DocumentedModelValidator<T extends BaseSlingModel> extends
    *
    * @return ResourceType of contextual troubleshooting component to show.
    */
+  @Nonnull
   public abstract String getResourceType();
 
 }

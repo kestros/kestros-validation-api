@@ -23,6 +23,8 @@ package io.kestros.commons.validation.api.services;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.validation.api.models.ModelValidator;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Model Validator Registration Service.
@@ -35,6 +37,7 @@ public interface ModelValidatorRegistrationService {
    *
    * @return Model Type to register the validator to.
    */
+  @Nonnull
   Class<? extends BaseSlingModel> getModelType();
 
   /**
@@ -42,6 +45,7 @@ public interface ModelValidatorRegistrationService {
    *
    * @return the ModelValidators to register.
    */
+  @Nonnull
   List<ModelValidator> getModelValidators();
 
   /**
@@ -49,6 +53,7 @@ public interface ModelValidatorRegistrationService {
    *
    * @return the ModelValidatorRegistrationHandlerService.
    */
+  @Nullable
   ModelValidatorRegistrationHandlerService getModelValidatorRegistrationHandlerService();
 
 }

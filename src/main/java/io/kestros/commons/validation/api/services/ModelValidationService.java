@@ -23,6 +23,7 @@ package io.kestros.commons.validation.api.services;
 import io.kestros.commons.osgiserviceutils.services.ManagedService;
 import io.kestros.commons.structuredslingmodels.BaseResource;
 import io.kestros.commons.validation.api.models.ModelValidationResult;
+import javax.annotation.Nonnull;
 
 /**
  * Model Validation Service.
@@ -35,6 +36,7 @@ public interface ModelValidationService extends ManagedService {
    * @return ModelValidationResult.
    * @param <T> Model Type.
    */
-  <T extends BaseResource> ModelValidationResult validate(T model);
+  @Nonnull
+  <T extends BaseResource> ModelValidationResult validate(@Nonnull T model);
 
 }

@@ -26,6 +26,7 @@ import io.kestros.commons.osgiserviceutils.services.cache.ManagedCacheService;
 import io.kestros.commons.structuredslingmodels.BaseResource;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
 /**
@@ -38,6 +39,7 @@ public interface ModelValidationCacheService extends CacheService, ManagedCacheS
    *
    * @return Cached validation map.
    */
+  @Nonnull
   Map<String, Object> getCachedValidationMap();
 
   /**
@@ -48,10 +50,12 @@ public interface ModelValidationCacheService extends CacheService, ManagedCacheS
    * @param <T> extends BaseResource
    *
    * @return List of validation errors as String.
+   *
    * @throws CacheRetrievalException Failed to retrieve a cached error message list.
    */
-  <T extends BaseResource> List<String> getCachedErrorMessages(Resource resource, Class<T> clazz)
-          throws CacheRetrievalException;
+  @Nonnull
+  <T extends BaseResource> List<String> getCachedErrorMessages(@Nonnull Resource resource,
+          @Nonnull Class<T> clazz) throws CacheRetrievalException;
 
   /**
    * Retrieves cached warning messages for a specified resource, when adapted to the specified
@@ -62,10 +66,12 @@ public interface ModelValidationCacheService extends CacheService, ManagedCacheS
    * @param <T> extends BaseResource
    *
    * @return List of validation warnings as String.
+   *
    * @throws CacheRetrievalException Failed to retrieve a cached warning message list.
    */
-  <T extends BaseResource> List<String> getCachedWarningMessages(Resource resource, Class<T> clazz)
-          throws CacheRetrievalException;
+  @Nonnull
+  <T extends BaseResource> List<String> getCachedWarningMessages(@Nonnull Resource resource,
+          @Nonnull Class<T> clazz) throws CacheRetrievalException;
 
   /**
    * Caches validators for a specified resource.
@@ -75,7 +81,8 @@ public interface ModelValidationCacheService extends CacheService, ManagedCacheS
    * @param errorMessages List of error messages to cache.
    * @param warningMessages List of warning messages to cache.
    */
-  <T extends BaseResource> void cacheValidationResults(T model, List<String> errorMessages,
-          List<String> warningMessages);
+  @Nonnull
+  <T extends BaseResource> void cacheValidationResults(@Nonnull T model,
+          @Nonnull List<String> errorMessages, @Nonnull List<String> warningMessages);
 
 }
