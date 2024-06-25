@@ -138,8 +138,7 @@ public class CommonValidators {
    */
   @Nonnull
   public static <T extends BaseResource> ModelValidator hasFileExtension(
-          @Nonnull final String extension,
-          @Nonnull final ModelValidationMessageType messageType) {
+          @Nonnull final String extension, @Nonnull final ModelValidationMessageType messageType) {
     return new ModelValidator<T>() {
 
       @Nonnull
@@ -160,7 +159,7 @@ public class CommonValidators {
       public String getDetailedMessage(@Nonnull T model) {
         if (model != null) {
           return String.format("Filename %s is expected to end with .%s.",
-                               model.getResource().getName(), extension);
+                  model.getResource().getName(), extension);
         } else {
           return String.format("Filename is expected to end with .%s.", extension);
         }
@@ -185,8 +184,7 @@ public class CommonValidators {
    */
   @Nonnull
   public static <T extends BaseResource> ModelValidator hasChildResource(
-          @Nonnull final String childName,
-          @Nonnull ModelValidationMessageType type) {
+          @Nonnull final String childName, @Nonnull ModelValidationMessageType type) {
     return new ModelValidator<T>() {
 
       @Nonnull
@@ -236,8 +234,7 @@ public class CommonValidators {
   @Nonnull
   public static <T extends BaseResource, S extends BaseResource> ModelValidator
       isChildResourceValidResourceType(@Nonnull final String childName,
-          @Nonnull final Class<S> childType,
-          @Nonnull ModelValidationMessageType type) {
+          @Nonnull final Class<S> childType, @Nonnull ModelValidationMessageType type) {
 
     return new ModelValidator<T>() {
 
@@ -332,8 +329,9 @@ public class CommonValidators {
   @Nonnull
   public static <T extends BaseResource> List<ModelValidator> getFailedErrorValidators(
           @Nonnull final T model, @Nonnull ModelValidationResult modelValidationResult) {
-    final List<ModelValidator> errorValidators = new ArrayList<>();
-    for (final String errorMessage : modelValidationResult.getMessages().get(ERROR)) {
+    List<String> errorMessages = modelValidationResult.getMessages().get(ERROR);
+    final List<ModelValidator> errorValidators = new ArrayList<>(errorMessages.size());
+    for (final String errorMessage : errorMessages) {
       final ModelValidator validator = new ModelValidator<T>() {
 
 
@@ -361,7 +359,7 @@ public class CommonValidators {
           return ERROR;
         }
       };
-      errorValidators.add(1, validator);
+      errorValidators.add(validator);
     }
     return errorValidators;
   }
@@ -378,9 +376,9 @@ public class CommonValidators {
   @Nonnull
   public static <T extends BaseResource> List<ModelValidator> getFailedWarningValidators(
           @Nonnull final T model, @Nonnull ModelValidationResult modelValidationResult) {
-    final List<ModelValidator> warningValidators = new ArrayList<>();
-
-    for (final String warningMessage : modelValidationResult.getMessages().get(WARNING)) {
+    List<String> warningMessages = modelValidationResult.getMessages().get(WARNING);
+    final List<ModelValidator> warningValidators = new ArrayList<>(warningMessages.size());
+    for (final String warningMessage :warningMessages) {
       final ModelValidator validator = new ModelValidator<T>() {
 
         @Nonnull
@@ -407,7 +405,7 @@ public class CommonValidators {
           return WARNING;
         }
       };
-      warningValidators.add(1, validator);
+      warningValidators.add(validator);
     }
     return warningValidators;
   }
@@ -473,11 +471,11 @@ public class CommonValidators {
    */
   @Nonnull
   public static <T extends BaseResource> ModelValidator modelListHasNoErrors(
-          @Nonnull final List<T> modelList,
-          @Nonnull final String message, @Nonnull final String detailedMessage,
+          @Nonnull final List<T> modelList, @Nonnull final String message,
+          @Nonnull final String detailedMessage,
           @Nonnull ModelValidationService modelValidationService) {
     return modelListHasNoFailedValidatorsOfType(modelList, message, detailedMessage, ERROR,
-                                                modelValidationService);
+            modelValidationService);
   }
 
   /**
@@ -493,11 +491,11 @@ public class CommonValidators {
    */
   @Nonnull
   public static <T extends BaseResource> ModelValidator modelListHasNoWarnings(
-          @Nonnull final List<T> modelList,
-          @Nonnull final String message, @Nonnull final String detailedMessage,
+          @Nonnull final List<T> modelList, @Nonnull final String message,
+          @Nonnull final String detailedMessage,
           @Nonnull final ModelValidationService modelValidationService) {
     return modelListHasNoFailedValidatorsOfType(modelList, message, detailedMessage, WARNING,
-                                                modelValidationService);
+            modelValidationService);
   }
 
   @Nonnull
