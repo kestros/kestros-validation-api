@@ -36,11 +36,7 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
   /**
    * Constructs ModelValidator that holds a set of ModelValidators.
    */
-  @SuppressFBWarnings({"MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR",
-          "PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS"})
-  public ModelValidatorBundle() {
-    this.registerValidators();
-  }
+
 
   @Nonnull
   @Override
@@ -55,7 +51,7 @@ public abstract class ModelValidatorBundle<T extends BaseSlingModel> extends Mod
         return Boolean.TRUE;
       }
     }
-    return isAllMustBeTrue();
+    return Boolean.TRUE;
   }
 
   /**
