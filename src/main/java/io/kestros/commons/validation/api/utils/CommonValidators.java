@@ -207,8 +207,7 @@ public class CommonValidators {
       @Nonnull
       @Override
       public String getDetailedMessage(@Nonnull T model) {
-        // todo this
-        return "";
+        return String.format("Expected child resource '%s' was not found.", childName);
       }
 
       @Nonnull
@@ -260,7 +259,9 @@ public class CommonValidators {
       @Nonnull
       @Override
       public String getDetailedMessage(@Nonnull T model) {
-        return StringUtils.EMPTY;
+        return String.format(
+                "Child resource '%s' could not be adapted to %s. Likely the wrong resourceType.",
+                childName, childType.getSimpleName());
       }
 
       @Nonnull
@@ -378,7 +379,7 @@ public class CommonValidators {
           @Nonnull final T model, @Nonnull ModelValidationResult modelValidationResult) {
     List<String> warningMessages = modelValidationResult.getMessages().get(WARNING);
     final List<ModelValidator> warningValidators = new ArrayList<>(warningMessages.size());
-    for (final String warningMessage :warningMessages) {
+    for (final String warningMessage : warningMessages) {
       final ModelValidator validator = new ModelValidator<T>() {
 
         @Nonnull
@@ -446,8 +447,7 @@ public class CommonValidators {
       @Nonnull
       @Override
       public String getDetailedMessage(@Nonnull BaseSlingModel model) {
-        // todo this
-        return "";
+        return getMessage();
       }
 
       @Nonnull
@@ -499,7 +499,7 @@ public class CommonValidators {
   }
 
   @Nonnull
-  private static <T extends BaseResource> ModelValidator modelListHasNoFailedValidatorsOfType(
+  static <T extends BaseResource> ModelValidator modelListHasNoFailedValidatorsOfType(
           @Nonnull List<T> modelList, String message, @Nonnull String detailedMessage,
           @Nonnull ModelValidationMessageType type,
           @Nonnull ModelValidationService validationService) {
@@ -511,10 +511,17 @@ public class CommonValidators {
         for (@Nonnull T model1 : modelList) {
           ModelValidationResult result = validationService.validate(model1);
           if (ERROR.name().equals(type.name())) {
-            if (result.getMessages().get(ERROR).size() > 0) {
+            if (result.getMessages().get(ERROR) != null
+                    && result.getMessages().get(ERROR).size() > 0) {
               return Boolean.FALSE;
             }
-            if (result.getMessages().get(WARNING).size() > 0) {
+            //  if (result.getMessages().get(WARNING) != null
+            //        &&result.getMessages().get(WARNING).size() > 0){
+            //  return Boolean.FALSE;
+            // }
+          } else if (WARNING.name().equals(type.name())) {
+            if (result.getMessages().get(WARNING) != null
+                    && result.getMessages().get(WARNING).size() > 0) {
               return Boolean.FALSE;
             }
           }
