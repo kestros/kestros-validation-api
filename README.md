@@ -12,12 +12,8 @@ This is the API layer of the validation framework. The implementation lives in `
 
 **Maven coordinates:**
 
-```xml
-<dependency>
-  <groupId>io.kestros.commons</groupId>
-  <artifactId>kestros-validation-api</artifactId>
-  <version>0.2.3</version>
-</dependency>
+```
+io.kestros.commons:kestros-validation-api
 ```
 
 **Build:**
@@ -29,11 +25,7 @@ mvn clean package
 **Deploy to a Sling instance:**
 
 ```bash
-curl -u admin:admin \
-  -F "action=install" \
-  -F "bundlestart=true" \
-  -F "bundlefile=@target/kestros-validation-api-0.2.3.jar" \
-  "http://localhost:8080/system/console/bundles"
+mvn clean install -P installBundle -Dsling.host=localhost -Dsling.port=8080
 ```
 
 ## Configuration
@@ -226,8 +218,8 @@ Utility class with pre-built validators for common checks.
 
 | Dependency | Maven Coordinates |
 |------------|-------------------|
-| kestros-structured-sling-models | `io.kestros.commons:kestros-structured-sling-models:[0.2.5,0.2.99]` |
-| kestros-osgi-service-utils | `io.kestros.commons:kestros-osgi-service-utils:[0.1.10,0.1.99]` |
+| kestros-structured-sling-models | `io.kestros.commons:kestros-structured-sling-models` |
+| kestros-osgi-service-utils | `io.kestros.commons:kestros-osgi-service-utils` |
 
 ### Downstream
 
@@ -237,11 +229,3 @@ Utility class with pre-built validators for common checks.
 | Any module defining custom validators | Depends on the validator and registration abstractions |
 | kestros-site-management-core | Uses validation on site/page models |
 | kestros-component-types-core | Uses validation on component type models |
-
-## Contribution Notes
-
-- **Branch from:** `develop`
-- **PR target:** `develop`
-- **Branch naming:** `{type}/TASK-NNN-short-description` (e.g. `feature/TASK-080-add-has-description-validator`)
-- **Commit format:** `[kestros-validation-api]: <action>, <brief result>`
-- **Build verification:** Run `mvn clean package` before submitting; all tests must pass
