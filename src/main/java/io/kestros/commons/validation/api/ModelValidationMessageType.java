@@ -19,9 +19,15 @@
 
 package io.kestros.commons.validation.api;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Enum of valid Message Types Validators can be categorized as.
  */
+@SuppressFBWarnings(value = "METHOD_NULLABILITY",
+    justification = "javac 15+ generates a synthetic $values() method on every enum, which source "
+        + "cannot annotate, and the Kestros nullability detector exempts values/valueOf but not "
+        + "$values. Remove once #1000 fixes the detector. Ruled by Danny, 2026-10-20.")
 public enum ModelValidationMessageType {
   ERROR,
   WARNING,
